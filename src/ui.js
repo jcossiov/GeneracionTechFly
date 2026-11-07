@@ -1,6 +1,6 @@
-import { loadScores, clearScores, saveSettings as saveSettingsStorage, loadPlayerName, savePlayerName } from './storage.js?v=10';
-import { saveBindings as saveBindingsStorage, loadBindings } from './storage.js?v=10';
-import { DEFAULT_BINDINGS } from './config.js?v=10';
+import { loadScores, clearScores, saveSettings as saveSettingsStorage, loadPlayerName, savePlayerName } from './storage.js?v=11';
+import { saveBindings as saveBindingsStorage, loadBindings } from './storage.js?v=11';
+import { DEFAULT_BINDINGS } from './config.js?v=11';
 function keyLabel(code) {
   const map = {
     Space: 'Espacio', Escape: 'Esc', Enter: 'Enter',

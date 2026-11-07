@@ -1,6 +1,6 @@
 // src/entities.js
 import * as THREE from 'three';
-import { CONFIG, POWERUP_TYPES } from './config.js?v=10';
+import { CONFIG, POWERUP_TYPES } from './config.js?v=11';
 
 // ---------- Player ----------
 export class Player {

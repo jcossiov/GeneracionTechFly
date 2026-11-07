@@ -1,12 +1,12 @@
 // src/game.js
 import * as THREE from 'three';
-import { CONFIG, POWERUP_TYPES, DEFAULT_BINDINGS } from './config.js?v=10';
-import { Player } from './entities.js?v=10';
-import { EnemyPool, BulletPool, ObstaclePool, PowerUpPool, ParticleSystem, Boss } from './entities.js?v=10';
-import { LevelManager } from './level.js?v=10';
-import { AudioEngine } from './audio.js?v=10';
-import { InputManager } from './controls.js?v=10';
-import { saveScore, loadSettings, saveSettings, loadBindings, saveBindings, loadPlayerName, savePlayerName } from './storage.js?v=10';
+import { CONFIG, POWERUP_TYPES, DEFAULT_BINDINGS } from './config.js?v=11';
+import { Player } from './entities.js?v=11';
+import { EnemyPool, BulletPool, ObstaclePool, PowerUpPool, ParticleSystem, Boss } from './entities.js?v=11';
+import { LevelManager } from './level.js?v=11';
+import { AudioEngine } from './audio.js?v=11';
+import { InputManager } from './controls.js?v=11';
+import { saveScore, loadSettings, saveSettings, loadBindings, saveBindings, loadPlayerName, savePlayerName } from './storage.js?v=11';
 
 export class Game {
   constructor(canvas) {

@@ -1,5 +1,5 @@
 // src/level.js
-import { CONFIG, ENEMY_TYPES } from './config.js?v=10';
+import { CONFIG, ENEMY_TYPES } from './config.js?v=11';
 
 export class LevelManager {
   constructor() {
@@ -34,7 +34,7 @@ export class LevelManager {
   update(dt) {
     if (this.mode === 'arcade') {
       this.arcadeTime += dt;
-      this.difficulty = 1 + Math.min(1, this.arcadeTime / 300); // +10% cada 30s hasta +100%
+      this.difficulty = 1 + Math.min(3, this.arcadeTime / 300); // +10% cada 30s hasta +300%
       // spawn logic handled by game via spawnTimer
       return;
     }

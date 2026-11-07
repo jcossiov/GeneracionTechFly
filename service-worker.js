@@ -1,5 +1,5 @@
 // service-worker.js
-const CACHE = 'skystrike-v10';
+const CACHE = 'skystrike-v11';
 const ASSETS = [
   './',
   './index.html',

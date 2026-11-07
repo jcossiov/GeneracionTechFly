@@ -1,4 +1,4 @@
-import { DEFAULT_BINDINGS } from './config.js?v=10';
+import { DEFAULT_BINDINGS } from './config.js?v=11';
 export class InputManager {
   constructor(canvas, settings, bindings) {
     this.canvas = canvas;

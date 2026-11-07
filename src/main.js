@@ -1,6 +1,6 @@
 // src/main.js
-import { Game } from './game.js?v=10';
-import { UI } from './ui.js?v=10';
+import { Game } from './game.js?v=11';
+import { UI } from './ui.js?v=11';
 
 const canvas = document.getElementById('game');
 const game = new Game(canvas);
