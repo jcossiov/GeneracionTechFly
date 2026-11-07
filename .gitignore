@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+www/
+
+# Android build
+android/.gradle/
+android/build/
+android/app/build/
+android/.idea/
+android/local.properties
+.gradle/
+
+# JDK download
+jdk17/
+jdk.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+.env

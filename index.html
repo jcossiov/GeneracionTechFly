@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0e1a" />
+<meta name="description" content="SkyStrike 3D - Juego de avión arcade en HTML5 (low-poly). Esquiva y destruye." />
+<title>SkyStrike 3D</title>
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,4 56,56 32,44 8,56' fill='%234cc9f0'/%3E%3C/svg%3E" />
+<style>
+  :root { --bg:#0a0e1a; --fg:#e6f1ff; --accent:#4cc9f0; --danger:#ff4d6d; --ok:#70e000; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { width:100%; height:100%; background:var(--bg); color:var(--fg); font-family: "Segoe UI", system-ui, -apple-system, sans-serif; overflow:hidden; touch-action:none; }
+  #game { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  .overlay { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; background:rgba(10,14,26,0.92); z-index:10; padding:20px; text-align:center; }
+  .overlay.hidden { display:none; }
+  h1 { font-size:clamp(28px,6vw,56px); letter-spacing:2px; text-shadow:0 0 20px var(--accent); }
+  h2 { font-size:clamp(20px,4vw,32px); color:var(--accent); }
+  p { max-width:600px; line-height:1.5; opacity:0.9; }
+  .btn { padding:12px 28px; font-size:18px; border:2px solid var(--accent); background:transparent; color:var(--fg); border-radius:8px; cursor:pointer; min-width:220px; transition:all .15s; }
+  .btn:hover,.btn:focus { background:var(--accent); color:#000; }
+  .btn.danger { border-color:var(--danger); }
+  .btn.danger:hover { background:var(--danger); color:#fff; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  .hud { position:fixed; top:10px; left:10px; right:10px; display:flex; justify-content:space-between; align-items:flex-start; z-index:5; pointer-events:none; font-size:14px; }
+  .hud .panel { background:rgba(0,0,0,0.45); padding:8px 12px; border-radius:8px; border:1px solid rgba(76,201,240,0.3); }
+  .bar { width:160px; height:12px; background:#222; border-radius:6px; overflow:hidden; margin-top:4px; }
+  .bar > div { height:100%; background:var(--ok); transition:width .1s; }
+  .bar.shield > div { background:var(--accent); }
+  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); padding:10px 18px; border-radius:8px; z-index:6; pointer-events:none; opacity:0; transition:opacity .3s; }
+  .toast.show { opacity:1; }
+  .controls-list { text-align:left; max-width:520px; font-size:14px; line-height:1.7; }
+  .controls-list kbd { background:#222; border:1px solid #444; border-radius:4px; padding:1px 6px; font-family:monospace; }
+  .settings { display:flex; flex-direction:column; gap:8px; width:min(400px,90vw); }
+  .settings label { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  .settings input[type=range] { flex:1; }
+  .scoreboard { max-height:50vh; overflow:auto; width:min(420px,90vw); }
+  .scoreboard table { width:100%; border-collapse:collapse; }
+  .scoreboard th,.scoreboard td { padding:6px 8px; border-bottom:1px solid #333; text-align:left; }
+  .touch-controls { position:fixed; inset:0; z-index:4; pointer-events:none; }
+  .touch-controls .stick { position:absolute; bottom:20px; left:20px; width:120px; height:120px; border-radius:50%; border:2px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.05); pointer-events:auto; }
+  .touch-controls .fire { position:absolute; bottom:40px; right:30px; width:90px; height:90px; border-radius:50%; border:2px solid var(--danger); background:rgba(255,77,109,0.15); color:#fff; font-size:14px; pointer-events:auto; display:flex; align-items:center; justify-content:center; }
+  .touch-controls.hidden { display:none; }
+  @media (pointer:fine) { .touch-controls { display:none !important; } }
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div class="hud" id="hud" style="display:none">
+  <div class="panel">
+    <div>Vida</div>
+    <div class="bar"><div id="hpBar"></div></div>
+    <div style="margin-top:6px">Escudo</div>
+    <div class="bar shield"><div id="shieldBar"></div></div>
+  </div>
+  <div class="panel" style="text-align:right">
+    <div>Puntos: <b id="score">0</b></div>
+    <div>Nivel: <b id="level">1</b> &nbsp; Oleada: <b id="wave">1</b></div>
+    <div>Dificultad: <b id="diff">100</b>%</div>
+    <div>Tiempo: <b id="time">0</b>s</div>
+    <div id="powerups" style="margin-top:4px; font-size:12px; opacity:.9"></div>
+    <div id="fps" style="margin-top:4px; font-size:12px; opacity:.7"></div>
+  </div>
+</div>
+
+<div class="overlay" id="menuOverlay">
+  <h1>SkyStrike 3D</h1>
+  <p>Esquiva obstáculos y destruye a los enemigos que bloquean tu ruta. Sobrevive y conquista cada nivel.</p>
+  <div class="row" style="width:min(360px,90vw)">
+    <label style="width:100%; display:flex; flex-direction:column; gap:4px; text-align:left">
+      <span>Nombre del jugador</span>
+      <input type="text" id="playerName" maxlength="16" placeholder="Piloto" style="padding:8px; border-radius:6px; border:1px solid var(--accent); background:#111; color:#fff; font-size:16px">
+    </label>
+  </div>
+  <div class="row">
+    <button class="btn" id="btnArcade">Modo Arcade (infinito)</button>
+    <button class="btn" id="btnLevels">Modo Niveles</button>
+  </div>
+  <div class="row">
+    <button class="btn" id="btnControls">Controles</button>
+    <button class="btn" id="btnScores">Puntuaciones</button>
+    <button class="btn" id="btnSettings">Ajustes</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="controlsOverlay">
+  <h2>Controles</h2>
+  <div class="controls-list">
+    <p><strong>Las teclas son configurables en Ajustes.</strong></p>
+    <p><kbd>Espacio</kbd> o <kbd>Clic</kbd> — Disparar</p>
+    <p><kbd>Shift</kbd> — Boost de velocidad</p>
+    <p><kbd>Esc</kbd> / <kbd>P</kbd> — Pausar</p>
+    <p>Ratón: arrastra para mover (clic para disparar)</p>
+    <p>Gamepad: stick izquierdo mover, RT/A disparar, RB boost</p>
+    <p>Táctil: joystick virtual izquierdo + botón disparar</p>
+  </div>
+  <button class="btn" id="btnBackFromControls">Volver</button>
+</div>
+
+<div class="overlay hidden" id="settingsOverlay">
+  <h2>Ajustes</h2>
+  <div class="settings">
+    <label>Volumen música <input type="range" id="musicVol" min="0" max="1" step="0.05" value="0.35"></label>
+    <label>Volumen efectos <input type="range" id="sfxVol" min="0" max="1" step="0.05" value="0.6"></label>
+    <label>Sensibilidad ratón <input type="range" id="mouseSens" min="0.5" max="3" step="0.1" value="1.5"></label>
+    <label><span>Mostrar FPS</span><input type="checkbox" id="showFps"></label>
+    <label><span>Vibración (móvil)</span><input type="checkbox" id="vibrate" checked></label>
+  </div>
+  <h3 style="margin-top:12px; color:var(--accent)">Controles</h3>
+  <div id="bindingsList" class="settings" style="margin-top:6px"></div>
+  <div class="row" style="margin-top:8px">
+    <button class="btn" id="btnRestoreBindings">Restaurar por defecto</button>
+  </div>
+  <button class="btn" id="btnBackFromSettings">Volver</button>
+</div>
+
+<div class="overlay hidden" id="scoresOverlay">
+  <h2>Mejores Puntuaciones</h2>
+  <div class="scoreboard" id="scoreboard"></div>
+  <div class="row">
+    <button class="btn" id="btnBackFromScores">Volver</button>
+    <button class="btn danger" id="btnClearScores">Borrar</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="pauseOverlay">
+  <h2>Pausa</h2>
+  <div class="row">
+    <button class="btn" id="btnResume">Reanudar</button>
+    <button class="btn" id="btnQuit">Salir al menú</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="gameoverOverlay">
+  <h2 id="goTitle">Game Over</h2>
+  <p id="goText"></p>
+  <div class="row">
+    <button class="btn" id="btnRetry">Reintentar</button>
+    <button class="btn" id="btnMenu">Menú principal</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="levelOverlay">
+  <h2 id="levelTitle">Nivel 1</h2>
+  <p id="levelText"></p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="touch-controls hidden" id="touchControls">
+  <div class="stick" id="stick"></div>
+  <div class="fire" id="fireBtn">FUEGO</div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+<script type="module" src="src/main.js?v=10"></script>
+</body>
+</html>

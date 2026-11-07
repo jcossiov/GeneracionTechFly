@@ -1,0 +1,14 @@
+{
+  "name": "SkyStrike 3D",
+  "short_name": "SkyStrike",
+  "description": "Juego de avión arcade 3D: esquiva y destruye.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0a0e1a",
+  "theme_color": "#4cc9f0",
+  "icons": [
+    { "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%230a0e1a'/%3E%3Cpolygon points='96,24 168,168 96,132 24,168' fill='%234cc9f0'/%3E%3C/svg%3E", "sizes": "192x192", "type": "image/svg+xml" },
+    { "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%230a0e1a'/%3E%3Cpolygon points='256,64 448,448 256,352 64,448' fill='%234cc9f0'/%3E%3C/svg%3E", "sizes": "512x512", "type": "image/svg+xml" }
+  ]
+}
