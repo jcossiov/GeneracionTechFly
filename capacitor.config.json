@@ -1,6 +1,6 @@
 {
-  "appId": "com.skystrike3d.game",
-  "appName": "SkyStrike 3D",
+  "appId": "com.gentechfly.game",
+  "appName": "Gen Tech Fly",
   "webDir": "www",
   "server": {
     "androidScheme": "https"

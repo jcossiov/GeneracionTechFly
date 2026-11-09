@@ -8,32 +8,37 @@ export const DEFAULT_BINDINGS = {
   boost: ['ShiftLeft', 'ShiftRight'],
   pause: ['Escape', 'KeyP'],
 };
+
 export const CONFIG = {
   // World
-  spawnZ: 70,
-  despawnZ: -12,
+  spawnZ: 80,
+  despawnZ: -14,
   playerZ: 0,
-  boundsX: 7.5,
+  boundsX: 7.8,
   boundsY: 4.5,
-  baseSpeed: 18,          // scroll speed of world (units/s)
-  maxSpeed: 40,
-  playerSpeed: 13,
+  baseSpeed: 19,          // scroll speed of world (units/s)
+  maxSpeed: 42,
+  playerSpeed: 14.5,
   boostMult: 1.7,
-  bulletSpeed: 55,
+  bulletSpeed: 65,
   enemyBulletSpeed: 22,
-  fireRate: 0.16,         // seconds between shots (level 1)
+  fireRate: 0.14,         // seconds between shots (level 1)
+  // Gate / Question Card timing (slow & child-friendly)
+  questionCardSpeed: 10.5, // ~7.5 seconds to read and fly into the question card
+  optionsCardSpeed: 8.5,   // ~9.5 seconds to read the options and steer into the right card
   // Difficulty
-  arcadeRamp: 0.0008,     // per second
+  arcadeRamp: 0.001,
   // Health
   playerMaxHp: 100,
   playerMaxShield: 100,
   // Scoring
-  scorePerSecond: 5,
-  scorePerKill: 50,
-  scorePerObstacle: 10,
+  scorePerSecond: 6,
+  scorePerKill: 60,
+  scorePerObstacle: 15,
+  scorePerGate: 200,
   // Visual
-  fogNear: 30,
-  fogFar: 90,
+  fogNear: 38,
+  fogFar: 115,
   // Audio
   masterMusic: 0.35,
   masterSfx: 0.6,

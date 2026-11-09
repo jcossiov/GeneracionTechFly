@@ -3,117 +3,581 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-<meta name="theme-color" content="#0a0e1a" />
-<meta name="description" content="SkyStrike 3D - Juego de avión arcade en HTML5 (low-poly). Esquiva y destruye." />
-<title>SkyStrike 3D</title>
+<meta name="theme-color" content="#ffc700" />
+<meta name="description" content="Gen Tech Fly — Diseñado y Desarrollado por Jesús Cossio para el evento de cierre de Generación Tech." />
+<meta name="author" content="Jesús Cossio" />
+<title>Gen Tech Fly — Diseñado y Desarrollado por Jesús Cossio</title>
 <link rel="manifest" href="manifest.json" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,4 56,56 32,44 8,56' fill='%234cc9f0'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,2 60,54 32,42 4,54' fill='%23ffc700'/%3E%3Cpolygon points='32,12 46,48 32,40 18,48' fill='%2300f5d4'/%3E%3C/svg%3E" />
 <style>
-  :root { --bg:#0a0e1a; --fg:#e6f1ff; --accent:#4cc9f0; --danger:#ff4d6d; --ok:#70e000; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  html,body { width:100%; height:100%; background:var(--bg); color:var(--fg); font-family: "Segoe UI", system-ui, -apple-system, sans-serif; overflow:hidden; touch-action:none; }
-  #game { position:fixed; inset:0; width:100%; height:100%; display:block; }
-  .overlay { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; background:rgba(10,14,26,0.92); z-index:10; padding:20px; text-align:center; }
-  .overlay.hidden { display:none; }
-  h1 { font-size:clamp(28px,6vw,56px); letter-spacing:2px; text-shadow:0 0 20px var(--accent); }
-  h2 { font-size:clamp(20px,4vw,32px); color:var(--accent); }
-  p { max-width:600px; line-height:1.5; opacity:0.9; }
-  .btn { padding:12px 28px; font-size:18px; border:2px solid var(--accent); background:transparent; color:var(--fg); border-radius:8px; cursor:pointer; min-width:220px; transition:all .15s; }
-  .btn:hover,.btn:focus { background:var(--accent); color:#000; }
-  .btn.danger { border-color:var(--danger); }
-  .btn.danger:hover { background:var(--danger); color:#fff; }
-  .row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
-  .hud { position:fixed; top:10px; left:10px; right:10px; display:flex; justify-content:space-between; align-items:flex-start; z-index:5; pointer-events:none; font-size:14px; }
-  .hud .panel { background:rgba(0,0,0,0.45); padding:8px 12px; border-radius:8px; border:1px solid rgba(76,201,240,0.3); }
-  .bar { width:160px; height:12px; background:#222; border-radius:6px; overflow:hidden; margin-top:4px; }
-  .bar > div { height:100%; background:var(--ok); transition:width .1s; }
-  .bar.shield > div { background:var(--accent); }
-  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); padding:10px 18px; border-radius:8px; z-index:6; pointer-events:none; opacity:0; transition:opacity .3s; }
-  .toast.show { opacity:1; }
-  .controls-list { text-align:left; max-width:520px; font-size:14px; line-height:1.7; }
-  .controls-list kbd { background:#222; border:1px solid #444; border-radius:4px; padding:1px 6px; font-family:monospace; }
-  .settings { display:flex; flex-direction:column; gap:8px; width:min(400px,90vw); }
-  .settings label { display:flex; justify-content:space-between; align-items:center; gap:10px; }
-  .settings input[type=range] { flex:1; }
-  .scoreboard { max-height:50vh; overflow:auto; width:min(420px,90vw); }
-  .scoreboard table { width:100%; border-collapse:collapse; }
-  .scoreboard th,.scoreboard td { padding:6px 8px; border-bottom:1px solid #333; text-align:left; }
-  .touch-controls { position:fixed; inset:0; z-index:4; pointer-events:none; }
-  .touch-controls .stick { position:absolute; bottom:20px; left:20px; width:120px; height:120px; border-radius:50%; border:2px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.05); pointer-events:auto; }
-  .touch-controls .fire { position:absolute; bottom:40px; right:30px; width:90px; height:90px; border-radius:50%; border:2px solid var(--danger); background:rgba(255,77,109,0.15); color:#fff; font-size:14px; pointer-events:auto; display:flex; align-items:center; justify-content:center; }
-  .touch-controls.hidden { display:none; }
-  @media (max-width: 768px) {
-    .hud { font-size: 12px; top: 6px; left: 6px; right: 6px; }
-    .hud .panel { padding: 6px 8px; }
-    .bar { width: 110px; height: 10px; }
-    .btn { padding: 10px 18px; font-size: 15px; min-width: 160px; }
-    h1 { font-size: 32px; }
-    h2 { font-size: 22px; }
-    .controls-list { font-size: 12px; }
-    .touch-controls .stick { width: 90px; height: 90px; }
-    .touch-controls .fire { width: 70px; height: 70px; font-size: 12px; }
+  :root {
+    --bg: #070b19;
+    --fg: #f8fafc;
+    --gt-gold: #ffc700;
+    --gt-amber: #f59e0b;
+    --gt-cyan: #00f5d4;
+    --gt-blue: #0284c7;
+    --gt-magenta: #f72585;
+    --gt-purple: #7928ca;
+    --accent: #ffc700;
+    --accent2: #00f5d4;
+    --danger: #ff2a55;
+    --warn: #ffc700;
+    --ok: #10b981;
   }
-  @media (max-width: 480px) {
-    .hud .panel { padding: 4px 6px; }
-    .bar { width: 90px; }
-    .btn { min-width: 140px; font-size: 14px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    touch-action: none;
+  }
+  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: radial-gradient(circle at center, rgba(14, 20, 48, 0.90) 0%, rgba(5, 8, 20, 0.97) 100%);
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    padding: 16px 20px;
+    text-align: center;
+    overflow-y: auto;
+  }
+  .overlay.hidden { display: none; }
+
+  /* Logo y Banner Oficial Generación Tech */
+  .gt-banner-wrap {
+    width: min(520px, 92vw);
+    max-height: 110px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid var(--gt-gold);
+    box-shadow: 0 0 26px rgba(255, 199, 0, 0.35), 0 4px 20px rgba(0, 0, 0, 0.6);
+    background: #000;
+    margin-bottom: 2px;
+  }
+  .gt-banner-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .brand-pill {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 999px;
+    background: rgba(255, 199, 0, 0.16);
+    border: 1px solid var(--gt-gold);
+    color: var(--gt-gold);
+    box-shadow: 0 0 12px rgba(255, 199, 0, 0.25);
+  }
+
+  /* Crédito Destacado de Autoría */
+  .author-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 5px 16px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255, 199, 0, 0.18), rgba(0, 245, 212, 0.18));
+    border: 1px solid rgba(255, 199, 0, 0.55);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(0, 245, 212, 0.2);
+  }
+  .author-badge strong {
+    color: var(--gt-gold);
+    text-shadow: 0 0 8px rgba(255, 199, 0, 0.5);
+    letter-spacing: 0.5px;
+  }
+
+  h1 {
+    font-size: clamp(30px, 5.5vw, 54px);
+    font-weight: 900;
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, #ffc700 0%, #ff4d6d 50%, #00f5d4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(255, 199, 0, 0.5));
+  }
+  h2 { font-size: clamp(20px, 3.8vw, 32px); color: var(--gt-gold); }
+  p { max-width: 620px; line-height: 1.45; opacity: 0.94; font-size: 14.5px; }
+
+  .route-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    justify-content: center;
+    max-width: 640px;
+    margin: 2px 0 4px;
+  }
+  .route-chip {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 7px;
+    background: rgba(0, 245, 212, 0.12);
+    border: 1px solid rgba(0, 245, 212, 0.35);
+    color: #e0f2fe;
+  }
+  .route-chip.gold {
+    background: rgba(255, 199, 0, 0.14);
+    border-color: rgba(255, 199, 0, 0.45);
+    color: #fef08a;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 800;
+    border: 2px solid var(--gt-gold);
+    background: rgba(15, 23, 42, 0.85);
+    color: var(--fg);
+    border-radius: 12px;
+    cursor: pointer;
+    min-width: 210px;
+    transition: all 0.16s ease;
+    box-shadow: 0 0 16px rgba(255, 199, 0, 0.2);
+  }
+  .btn:hover, .btn:focus {
+    background: linear-gradient(90deg, #ffc700, #00f5d4);
+    border-color: #fff;
+    color: #070b19;
+    transform: translateY(-2px);
+    box-shadow: 0 0 28px rgba(255, 199, 0, 0.6);
+  }
+  .btn.primary {
+    border-color: var(--gt-gold);
+    background: linear-gradient(90deg, rgba(255, 199, 0, 0.25), rgba(0, 245, 212, 0.25));
+  }
+  .btn.danger { border-color: var(--danger); box-shadow: 0 0 14px rgba(255, 42, 85, 0.25); }
+  .btn.danger:hover { background: var(--danger); color: #fff; box-shadow: 0 0 22px rgba(255, 42, 85, 0.6); }
+
+  .row { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; }
+
+  .footer-credit {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 4px;
+  }
+  .footer-credit strong {
+    color: var(--gt-gold);
+  }
+
+  /* HUD Principal */
+  .hud {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 5;
+    pointer-events: none;
+    font-size: 13px;
+    gap: 10px;
+  }
+  .hud .panel {
+    background: rgba(7, 11, 25, 0.82);
+    backdrop-filter: blur(8px);
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 199, 0, 0.45);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55);
+  }
+  .hud-interactive { pointer-events: auto; }
+  .stage-badge {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gt-gold);
+    margin-bottom: 2px;
+  }
+  .module-badge {
+    font-size: 12px;
+    font-weight: 600;
+    color: #bae6fd;
+    margin-bottom: 8px;
+  }
+  .bar {
+    width: 170px;
+    height: 11px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 3px;
+  }
+  .bar > div { height: 100%; background: linear-gradient(90deg, #10b981, #00f5d4); transition: width 0.12s; }
+  .bar.shield > div { background: linear-gradient(90deg, #ffc700, #00f5d4); }
+
+  .hud-btn {
+    margin-top: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 199, 0, 0.4);
+    background: rgba(255, 199, 0, 0.12);
+    color: #fff;
+    cursor: pointer;
+    pointer-events: auto;
+    width: 100%;
+    text-align: center;
+    transition: all 0.14s ease;
+  }
+  .hud-btn:hover { background: var(--gt-gold); color: #000; box-shadow: 0 0 14px rgba(255, 199, 0, 0.5); }
+
+  /* Tarjeta Superior Súper Visible de Pregunta y Opciones */
+  .center-hud {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: min(640px, 94vw);
+    pointer-events: none;
+  }
+  .question-card-ui {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(14, 18, 42, 0.96), rgba(28, 16, 48, 0.96));
+    border: 3px solid var(--gt-gold);
+    border-radius: 18px;
+    padding: 14px 20px;
+    text-align: center;
+    box-shadow: 0 8px 34px rgba(255, 199, 0, 0.45);
+    transition: all 0.2s ease;
+  }
+  .question-card-ui.options-mode {
+    border-color: var(--gt-cyan);
+    box-shadow: 0 8px 34px rgba(0, 245, 212, 0.5);
+  }
+  .question-card-ui.hidden { display: none; }
+  .question-card-ui .q-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: rgba(255, 199, 0, 0.22);
+    color: var(--gt-gold);
+    text-transform: uppercase;
+  }
+  .question-card-ui.options-mode .q-tag {
+    background: rgba(0, 245, 212, 0.22);
+    color: var(--gt-cyan);
+  }
+  .question-card-ui .q-text {
+    font-size: clamp(20px, 3.4vw, 30px);
+    font-weight: 900;
+    color: #ffffff;
+    margin-top: 8px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  }
+  .question-card-ui .q-sub {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fde68a;
+    margin-top: 6px;
+  }
+  .question-card-ui.options-mode .q-sub {
+    color: #a7f3d0;
+  }
+  .options-preview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .options-preview.hidden { display: none; }
+  .opt-pill {
+    padding: 6px 14px;
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.92);
+    border: 2px solid var(--gt-gold);
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    box-shadow: 0 0 12px rgba(255, 199, 0, 0.2);
+  }
+  .opt-pill span {
+    color: var(--gt-gold);
+    margin-right: 5px;
+  }
+
+  .boss-hud {
+    width: 100%;
+    background: rgba(28, 7, 38, 0.92);
+    border: 2px solid var(--danger);
+    border-radius: 12px;
+    padding: 8px 14px;
+    text-align: center;
+    box-shadow: 0 0 24px rgba(255, 42, 85, 0.45);
+  }
+  .boss-hud.hidden { display: none; }
+  .boss-hud .boss-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #fda4af;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .boss-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 5px;
+    border: 1px solid rgba(255, 42, 85, 0.5);
+  }
+  .boss-bar > div {
+    height: 100%;
+    background: linear-gradient(90deg, #f72585, #ffc700);
+    transition: width 0.1s;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(7, 11, 25, 0.95);
+    border: 2px solid var(--gt-gold);
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 12px;
+    z-index: 8;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s;
+    text-align: center;
+    max-width: 90vw;
+    box-shadow: 0 4px 24px rgba(255, 199, 0, 0.35);
+  }
+  .toast.show { opacity: 1; }
+
+  .controls-list { text-align: left; max-width: 540px; font-size: 14px; line-height: 1.75; }
+  .controls-list kbd { background: #1e293b; border: 1px solid #475569; border-radius: 4px; padding: 2px 7px; font-family: monospace; color: var(--gt-gold); }
+  .settings { display: flex; flex-direction: column; gap: 8px; width: min(420px, 90vw); }
+  .settings label { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .settings input[type=range] { flex: 1; }
+  .scoreboard { max-height: 50vh; overflow: auto; width: min(460px, 92vw); }
+  .scoreboard table { width: 100%; border-collapse: collapse; }
+  .scoreboard th, .scoreboard td { padding: 6px 8px; border-bottom: 1px solid #1e293b; text-align: left; }
+
+  .touch-controls { position: fixed; inset: 0; z-index: 4; pointer-events: none; }
+  .touch-controls .stick {
+    position: absolute;
+    bottom: 22px;
+    left: 22px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 199, 0, 0.45);
+    background: rgba(255, 199, 0, 0.08);
+    pointer-events: auto;
+  }
+  .touch-controls .fire {
+    position: absolute;
+    bottom: 34px;
+    right: 26px;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    border: 2px solid var(--danger);
+    background: rgba(255, 42, 85, 0.25);
+    color: #fff;
+    font-weight: 800;
+    font-size: 14px;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .touch-controls .boost-touch {
+    position: absolute;
+    bottom: 132px;
+    right: 34px;
+    width: 70px;
+    height: 44px;
+    border-radius: 10px;
+    border: 2px solid var(--gt-gold);
+    background: rgba(255, 199, 0, 0.22);
+    color: #fff;
+    font-weight: 800;
+    font-size: 12px;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .touch-controls.hidden { display: none; }
+
+  /* Responsive y Adaptación Óptima para Tablets (Horizontal y Vertical) */
+  @media (orientation: portrait) {
+    .hud { font-size: 13px; top: 12px; left: 12px; right: 12px; }
+    .center-hud { top: 130px; width: 92vw; }
+    .question-card-ui .q-text { font-size: clamp(20px, 4.5vw, 32px); }
+    .touch-controls .stick { bottom: 40px; left: 35px; width: 130px; height: 130px; }
+    .touch-controls .fire { bottom: 45px; right: 35px; width: 95px; height: 95px; font-size: 16px; }
+    .touch-controls .boost-touch { bottom: 155px; right: 45px; width: 80px; height: 48px; font-size: 13px; }
+  }
+
+  @media (min-width: 768px) and (max-width: 1366px) {
+    /* Tablets (iPad, Galaxy Tab, etc.) en Horizontal y Vertical */
+    .btn { min-width: 240px; font-size: 17px; padding: 14px 28px; }
+    .gt-banner-wrap { width: min(620px, 90vw); max-height: 140px; }
+    .hud .panel { padding: 12px 18px; font-size: 14px; }
+    .bar { width: 200px; height: 13px; }
+    .touch-controls .stick { width: 140px; height: 140px; }
+    .touch-controls .fire { width: 100px; height: 100px; font-size: 16px; }
+    .touch-controls .boost-touch { width: 85px; height: 50px; font-size: 14px; }
+  }
+
+  @media (max-width: 768px) {
+    .gt-banner-wrap { max-height: 85px; }
+    .hud { font-size: 11px; top: 6px; left: 6px; right: 6px; }
+    .hud .panel { padding: 6px 9px; }
+    .bar { width: 105px; height: 9px; }
+    .center-hud { top: 82px; width: 95vw; }
+    .question-card-ui { padding: 10px 12px; }
+    .btn { padding: 10px 18px; font-size: 14px; min-width: 165px; }
+    .touch-controls .stick { width: 96px; height: 96px; }
+    .touch-controls .fire { width: 74px; height: 74px; font-size: 12px; }
+    .touch-controls .boost-touch { bottom: 118px; right: 28px; width: 64px; height: 38px; font-size: 11px; }
   }
 </style>
 </head>
 <body>
 <canvas id="game"></canvas>
 
+<!-- HUD Principal -->
 <div class="hud" id="hud" style="display:none">
-  <div class="panel">
-    <div>Vida</div>
+  <div class="panel hud-interactive">
+    <div class="stage-badge" id="stageBadge">NIVEL 1 • ETAPA SEMILLA</div>
+    <div class="module-badge" id="moduleBadge">Ruta: Matemáticas Iniciales</div>
+    <div>Vida del Avión</div>
     <div class="bar"><div id="hpBar"></div></div>
-    <div style="margin-top:6px">Escudo</div>
+    <div style="margin-top:5px">Escudo Cuántico</div>
     <div class="bar shield"><div id="shieldBar"></div></div>
+    <div style="margin-top:6px; display:flex; justify-content:space-between; font-size:12px; color:#93c5fd">
+      <span>Vel: <b id="speedVal" style="color:var(--gt-gold)">720</b> km/h</span>
+      <span>Racha: <b id="streakVal" style="color:var(--gt-cyan)">x0</b></span>
+    </div>
   </div>
-  <div class="panel" style="text-align:right">
-    <div>Puntos: <b id="score">0</b></div>
+
+  <div class="panel hud-interactive" style="text-align:right">
+    <div style="font-size:15px">Puntos: <b id="score" style="color:var(--gt-gold)">0</b></div>
     <div>Nivel: <b id="level">1</b> &nbsp; Oleada: <b id="wave">1</b></div>
     <div>Dificultad: <b id="diff">100</b>%</div>
     <div>Tiempo: <b id="time">0</b>s</div>
-    <div id="powerups" style="margin-top:4px; font-size:12px; opacity:.9"></div>
-    <div id="fps" style="margin-top:4px; font-size:12px; opacity:.7"></div>
+    <div id="powerups" style="margin-top:4px; font-size:12px; color:var(--gt-gold); font-weight:700"></div>
+    <div id="fps" style="margin-top:2px; font-size:11px; opacity:.75"></div>
+    <button class="hud-btn" id="btnPauseHud">⏸ Pausa [P]</button>
   </div>
 </div>
 
+<!-- Tarjeta Superior Súper Visible de Pregunta y Opciones + Barra del Jefe -->
+<div class="center-hud">
+  <div class="question-card-ui hidden" id="questionBanner">
+    <div class="q-tag" id="questionTag">🃏 TARJETA DE PREGUNTA — ¡PASA POR LA TARJETA DORADA!</div>
+    <div class="q-text" id="questionText">🧮 ¿Cuánto es 3 + 4?</div>
+    <div class="q-sub" id="questionSub">✈️ Si sabes la respuesta, cruza la Tarjeta de Pregunta al frente para desplegar las opciones</div>
+    <div class="options-preview hidden" id="optionsPreview"></div>
+  </div>
+
+  <div class="boss-hud hidden" id="bossHud">
+    <div class="boss-title">
+      <span id="bossName">⚠️ GLITCH OVERLORD</span>
+      <span id="bossOverclock" style="color:var(--gt-gold)">VELOCIDAD: 100%</span>
+    </div>
+    <div class="boss-bar"><div id="bossHpBar" style="width:100%"></div></div>
+  </div>
+</div>
+
+<!-- Menú Principal -->
 <div class="overlay" id="menuOverlay">
-  <h1>SkyStrike 3D</h1>
-  <p>Esquiva obstáculos y destruye a los enemigos que bloquean tu ruta. Sobrevive y conquista cada nivel.</p>
-  <div class="row" style="width:min(360px,90vw)">
+  <!-- Banner Oficial Generación Tech -->
+  <div class="gt-banner-wrap">
+    <img src="assets/banner-generacion-tech.jpg" alt="Generación Tech • CTA • Ruta N • Alcaldía de Medellín" />
+  </div>
+
+  <!-- Crédito Oficial de Autoría -->
+  <div class="author-badge">
+    ✨ Diseñado y Desarrollado por <strong>Jesús Cossio</strong>
+  </div>
+
+  <h1>GEN TECH FLY</h1>
+  <p>Simulador y juego aéreo del evento de cierre de <strong>Generación Tech</strong>. Resuelve las operaciones matemáticas y retos pedagógicos de Python, Arduino, Impresión 3D e IoT volando hacia la tarjeta correcta para potenciar tu avión.</p>
+  
+  <div class="route-chips">
+    <span class="route-chip gold">🌱 Nivel 1-2: Matemáticas para Niños</span>
+    <span class="route-chip">🐍 Nivel 3: Python (print / def)</span>
+    <span class="route-chip">🤖 Nivel 4: Arduino e Impresión 3D</span>
+    <span class="route-chip gold">🌐 Nivel 5+: Internet de las Cosas (IoT)</span>
+  </div>
+
+  <div class="row" style="width:min(360px,90vw); margin-top:2px">
     <label style="width:100%; display:flex; flex-direction:column; gap:4px; text-align:left">
-      <span>Nombre del jugador</span>
-      <input type="text" id="playerName" maxlength="16" placeholder="Piloto" style="padding:8px; border-radius:6px; border:1px solid var(--accent); background:#111; color:#fff; font-size:16px">
+      <span style="font-size:13px; color:#bae6fd">Nombre del Piloto Generación Tech</span>
+      <input type="text" id="playerName" maxlength="18" placeholder="Piloto Tech" style="padding:10px 12px; border-radius:8px; border:2px solid var(--gt-gold); background:#0c1226; color:#fff; font-size:16px; outline:none">
     </label>
   </div>
-  <div class="row">
-    <button class="btn" id="btnArcade">Modo Arcade (infinito)</button>
-    <button class="btn" id="btnLevels">Modo Niveles</button>
+
+  <div class="row" style="margin-top:2px">
+    <button class="btn primary" id="btnLevels">🚀 Modo Niveles (Ruta Gen Tech)</button>
+    <button class="btn" id="btnArcade">♾️ Modo Arcade (Infinito)</button>
   </div>
   <div class="row">
     <button class="btn" id="btnControls">Controles</button>
-    <button class="btn" id="btnScores">Puntuaciones</button>
+    <button class="btn" id="btnScores">Salón de la Fama</button>
     <button class="btn" id="btnSettings">Ajustes</button>
   </div>
+
+  <div class="footer-credit">
+    Diseñado y Desarrollado por <strong>Jesús Cossio</strong> • Generación Tech / CTA
+  </div>
 </div>
 
+<!-- Controles -->
 <div class="overlay hidden" id="controlsOverlay">
-  <h2>Controles</h2>
+  <h2>Controles de Vuelo</h2>
   <div class="controls-list">
-    <p><strong>Las teclas son configurables en Ajustes.</strong></p>
-    <p><kbd>Espacio</kbd> o <kbd>Clic</kbd> — Disparar</p>
-    <p><kbd>Shift</kbd> — Boost de velocidad</p>
-    <p><kbd>Esc</kbd> / <kbd>P</kbd> — Pausar</p>
-    <p>Ratón: arrastra para mover (clic para disparar)</p>
-    <p>Gamepad: stick izquierdo mover, RT/A disparar, RB boost</p>
-    <p>Táctil: joystick virtual izquierdo + botón disparar</p>
+    <p><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> o <kbd>Flechas</kbd> — Mover el avión (Arriba, Izquierda, Abajo, Derecha)</p>
+    <p><kbd>Espacio</kbd> o <kbd>Clic</kbd> — Disparar cañones de plasma</p>
+    <p><kbd>Shift</kbd> — Postcombustión (Turbo Boost)</p>
+    <p><kbd>Esc</kbd> / <kbd>P</kbd> — Pausar misión</p>
+    <p>🃏 <strong>Cómo responder:</strong> Primero aparece la <strong>Tarjeta Dorada de Pregunta</strong>. Pasa por ella si sabes la respuesta y luego se desplegarán las <strong>Tarjetas de Opciones</strong> al frente con mucho tiempo para elegir.</p>
   </div>
   <button class="btn" id="btnBackFromControls">Volver</button>
+  <div class="footer-credit">Diseñado y Desarrollado por <strong>Jesús Cossio</strong></div>
 </div>
 
+<!-- Ajustes -->
 <div class="overlay hidden" id="settingsOverlay">
   <h2>Ajustes</h2>
   <div class="settings">
@@ -121,51 +585,61 @@
     <label>Volumen efectos <input type="range" id="sfxVol" min="0" max="1" step="0.05" value="0.6"></label>
     <label>Sensibilidad ratón <input type="range" id="mouseSens" min="0.5" max="3" step="0.1" value="1.5"></label>
     <label><span>Mostrar FPS</span><input type="checkbox" id="showFps"></label>
-    <label><span>Vibración (móvil)</span><input type="checkbox" id="vibrate" checked></label>
+    <label><span>Vibración háptica (móvil)</span><input type="checkbox" id="vibrate" checked></label>
   </div>
-  <h3 style="margin-top:12px; color:var(--accent)">Controles</h3>
-  <div id="bindingsList" class="settings" style="margin-top:6px"></div>
+  <h3 style="margin-top:10px; color:var(--gt-gold)">Teclas Configurables</h3>
+  <div id="bindingsList" class="settings" style="margin-top:4px"></div>
   <div class="row" style="margin-top:8px">
     <button class="btn" id="btnRestoreBindings">Restaurar por defecto</button>
   </div>
-  <button class="btn" id="btnBackFromSettings">Volver</button>
+  <button class="btn" id="btnBackFromSettings">Guardar y Volver</button>
 </div>
 
+<!-- Puntuaciones -->
 <div class="overlay hidden" id="scoresOverlay">
-  <h2>Mejores Puntuaciones</h2>
+  <h2>Salón de la Fama — Gen Tech Fly</h2>
   <div class="scoreboard" id="scoreboard"></div>
   <div class="row">
     <button class="btn" id="btnBackFromScores">Volver</button>
-    <button class="btn danger" id="btnClearScores">Borrar</button>
+    <button class="btn danger" id="btnClearScores">Borrar historial</button>
   </div>
+  <div class="footer-credit">Diseñado y Desarrollado por <strong>Jesús Cossio</strong></div>
 </div>
 
+<!-- Pausa -->
 <div class="overlay hidden" id="pauseOverlay">
-  <h2>Pausa</h2>
+  <h2>Misión en Pausa</h2>
   <div class="row">
-    <button class="btn" id="btnResume">Reanudar</button>
-    <button class="btn" id="btnQuit">Salir al menú</button>
+    <button class="btn primary" id="btnResume">Reanudar Vuelo</button>
+    <button class="btn danger" id="btnQuit">Salir al Menú</button>
   </div>
+  <div class="footer-credit">Diseñado y Desarrollado por <strong>Jesús Cossio</strong></div>
 </div>
 
+<!-- Game Over -->
 <div class="overlay hidden" id="gameoverOverlay">
-  <h2 id="goTitle">Game Over</h2>
+  <h2 id="goTitle">Misión Finalizada</h2>
   <p id="goText"></p>
   <div class="row">
-    <button class="btn" id="btnRetry">Reintentar</button>
-    <button class="btn" id="btnMenu">Menú principal</button>
+    <button class="btn primary" id="btnRetry">Reintentar Misión</button>
+    <button class="btn" id="btnMenu">Menú Principal</button>
   </div>
+  <div class="footer-credit">Diseñado y Desarrollado por <strong>Jesús Cossio</strong> • Generación Tech</div>
 </div>
 
+<!-- Transición de Nivel / Etapa de la Vida -->
 <div class="overlay hidden" id="levelOverlay">
-  <h2 id="levelTitle">Nivel 1</h2>
-  <p id="levelText"></p>
+  <div class="brand-pill" id="levelStagePill">RUTA PEDAGÓGICA GENERACIÓN TECH</div>
+  <h2 id="levelTitle">Nivel 1 • Etapa Semilla</h2>
+  <p id="levelText" style="font-size:18px; color:#bae6fd"></p>
+  <div class="footer-credit" style="margin-top:8px">Diseñado y Desarrollado por <strong>Jesús Cossio</strong></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <div class="touch-controls hidden" id="touchControls">
   <div class="stick" id="stick"></div>
+  <div class="boost-touch" id="boostBtn">TURBO</div>
   <div class="fire" id="fireBtn">FUEGO</div>
 </div>
 
@@ -176,6 +650,6 @@
   }
 }
 </script>
-<script type="module" src="src/main.js?v=11"></script>
+<script type="module" src="src/main.js?v=14"></script>
 </body>
 </html>

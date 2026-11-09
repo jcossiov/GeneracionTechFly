@@ -1,61 +1,43 @@
-# SkyStrike 3D
+# Gen Tech Fly — Edición Cierre Generación Tech
 
-Juego de avión arcade en 3D low-poly (HTML5 + Three.js). Esquiva obstáculos y destruye a los enemigos que bloquean tu ruta. Un jugador, con modos Arcade infinito y Niveles con jefes.
+> **Diseñado y Desarrollado por Jesús Cossio**  
+> Evento de Cierre • **Generación Tech** (CTA • Ruta N • Alcaldía de Medellín)
 
-## Ejecutar en local (recomendado para máxima fluidez)
+![Generación Tech](assets/banner-generacion-tech.jpg)
 
-Requisitos: Python 3 o Node.js.
+Simulador y juego aéreo 3D de alto rendimiento (HTML5 + Three.js PBR) con la identidad visual oficial de **Generación Tech**.
 
-### Windows
-Doble clic en `start.bat` o ejecuta:
+---
+
+## 🎨 Identidad Visual y Créditos
+- **Autoría:** Diseñado y Desarrollado por **Jesús Cossio**.
+- **Colores Oficiales de Generación Tech:**
+  - 🟡 **Amarillo / Dorado Tech:** `#ffc700`
+  - 🟢 **Cian / Menta Cibernético:** `#00f5d4`
+  - 🔴 **Coral / Magenta Tech:** `#ff3366` / `#f72585`
+  - 🔵 **Azul Oscuro / Espacio Profundo:** `#070b19` / `#0f172a`
+- **Banner Oficial de Generación Tech:** Incorporado en el menú y pantalla de inicio.
+
+---
+
+## 🚀 Características Principales
+- **Vista Panorámica Óptima:** Vista táctica panorámica con perspectiva limpia del avión, sus alerones dinámicos y sus dos turbinas de postcombustión.
+- **Mecánica de Tarjetas Pedagógicas en 2 Fases:**
+  1. **Tarjeta de Pregunta:** Se aproxima suavemente por el centro. Si el jugador sabe la respuesta, pasa con su avión a través de la tarjeta dorada.
+  2. **Tarjetas de Opciones:** Se despliegan al frente (Tarjeta A, B, C...) con suficiente tiempo de lectura (~9.5s) y ruta despejada de enemigos para que niños de todas las edades puedan elegir con tranquilidad.
+- **Ruta Pedagógica Gradual (Desde niños pequeños hasta nivel avanzado):**
+  - **Nivel 1 (Etapa Semilla - Niños):** Sumas y restas de un solo dígito con 2 opciones.
+  - **Nivel 2 (Infancia Exploradora):** Tablas de multiplicar y agilidad mental.
+  - **Nivel 3 (Juventud Programadora):** Programación en Python (`print`, `def`, variables).
+  - **Nivel 4 (Aprendiz Maker):** Robótica con Arduino UNO e Impresión 3D (`PLA`, `.STL`, ejes X/Y/Z).
+  - **Nivel 5+ (Innovador Tech):** Internet de las Cosas (IoT), sensores Wi-Fi y retos combinados.
+- **Jefe Evolutivo ("El Gran Bug"):** Aumenta su velocidad y poder a medida que transcurren los segundos en combate (Fases de Overclock).
+- **Rendimiento Zero-Lag:** Diseñado con *Object Pooling* y geometrías pre-compiladas para 60 FPS estables en la web y dispositivos móviles Android.
+
+---
+
+## 💻 Ejecución en Local
+```bash
+python3 -m http.server 8080
 ```
-python -m http.server 8080
-```
-Luego abre http://localhost:8080
-
-### macOS / Linux
-```
-./start.sh
-```
-o `python3 -m http.server 8080`.
-
-> Nota: por usar módulos ES, no abras `index.html` directamente con `file://`. Usa el servidor local.
-
-## Controles
-- `WASD` / flechas — mover
-- `Espacio` o clic — disparar
-- `Shift` — boost
-- `Esc` / `P` — pausar
-- Ratón: arrastrar para mover, clic para disparar
-- Gamepad: stick izquierdo mover, RT/A disparar, RB boost
-- Táctil: joystick virtual + botón FUEGO
-
-## Jugar en la nube
-El juego es 100% estático. Súbelo a cualquier hosting estático:
-- Netlify: arrastra la carpeta del proyecto
-- Vercel: `vercel` en la carpeta
-- GitHub Pages: sube el repo y activa Pages
-- Cloudflare Pages
-
-Funciona offline gracias al Service Worker (PWA): se puede instalar como app desde el navegador.
-
-## Exportar a APK (Android)
-Requisitos: Node.js, Android Studio.
-
-```
-npm install
-npx cap add android
-npx cap sync android
-npx cap open android
-```
-Luego compila desde Android Studio (Build > Build APK). El `webDir` apunta a la raíz del proyecto.
-
-## Estructura
-- `index.html` — UI y overlays
-- `src/` — código del juego (ES modules)
-- `manifest.json` — PWA
-- `service-worker.js` — caché offline
-- `capacitor.config.json` — config APK
-
-## Presupuesto cero
-Sin dependencias de pago. Three.js se carga desde CDN (con caché offline). Audio generado proceduralmente con Web Audio API. Sin backend obligatorio.
+Luego abre en tu navegador: `http://localhost:8080`.

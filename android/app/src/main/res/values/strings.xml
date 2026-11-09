@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">SkyStrike 3D</string>
-    <string name="title_activity_main">SkyStrike 3D</string>
-    <string name="package_name">com.skystrike3d.game</string>
-    <string name="custom_url_scheme">com.skystrike3d.game</string>
+    <string name="app_name">Gen Tech Fly</string>
+    <string name="title_activity_main">Gen Tech Fly</string>
+    <string name="package_name">com.gentechfly.game</string>
+    <string name="custom_url_scheme">com.gentechfly.game</string>
 </resources>

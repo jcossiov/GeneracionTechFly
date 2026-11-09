@@ -1,9 +1,9 @@
 {
-  "name": "skystrike-3d",
-  "version": "1.0.0",
-  "description": "Juego de avion arcade 3D low-poly en HTML5",
+  "name": "gen-tech-fly",
+  "version": "2.0.0",
+  "description": "Gen Tech Fly - Simulador y juego aereo 3D para Generacion Tech",
   "scripts": {
-    "start": "python -m http.server 8080",
+    "start": "python3 -m http.server 8080",
     "android": "npx cap add android && npx cap sync android && npx cap open android"
   },
   "dependencies": {
