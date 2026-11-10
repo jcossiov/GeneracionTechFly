@@ -19,20 +19,20 @@ export class LevelManager {
     this.milestoneTimer = 4.0;
   }
 
-  start(mode) {
+  start(mode, startLevel = 1) {
     this.mode = mode;
-    this.level = 1;
+    this.level = Math.max(1, Math.min(5, parseInt(startLevel) || 1));
     this.wave = 1;
     this.state = 'wave';
     this.timer = 0;
     this.waveTimer = 0;
     this.bossActive = false;
-    this.difficulty = 1;
-    this.arcadeTime = 0;
+    this.difficulty = 1 + (this.level - 1) * 0.28;
+    this.arcadeTime = (this.level - 1) * 45;
     this.spawnTimer = 0.8;
-    this.gateTimer = 5.5;
+    this.gateTimer = 4.5;
     this.milestoneIndex = 0;
-    this.milestoneTimer = 4.5;
+    this.milestoneTimer = 3.5;
   }
 
   getCurrentStage() {

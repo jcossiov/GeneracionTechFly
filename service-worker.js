@@ -1,21 +1,21 @@
 // service-worker.js
-const CACHE = 'gentechfly-v14';
+const CACHE = 'gentechfly-v15';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './assets/banner-generacion-tech.jpg',
   './assets/logo-generacion-tech.jpg',
-  './src/main.js?v=14',
-  './src/game.js?v=14',
-  './src/entities.js?v=14',
-  './src/level.js?v=14',
-  './src/curriculum.js?v=14',
-  './src/audio.js?v=14',
-  './src/controls.js?v=14',
-  './src/ui.js?v=14',
-  './src/config.js?v=14',
-  './src/storage.js?v=14',
+  './src/main.js?v=15',
+  './src/game.js?v=15',
+  './src/entities.js?v=15',
+  './src/level.js?v=15',
+  './src/curriculum.js?v=15',
+  './src/audio.js?v=15',
+  './src/controls.js?v=15',
+  './src/ui.js?v=15',
+  './src/config.js?v=15',
+  './src/storage.js?v=15',
 ];
 
 self.addEventListener('install', (e) => {

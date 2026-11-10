@@ -47,6 +47,7 @@ export class UI {
     this.pauseOverlay = document.getElementById('pauseOverlay');
     this.gameoverOverlay = document.getElementById('gameoverOverlay');
     this.levelOverlay = document.getElementById('levelOverlay');
+    this.levelSelectOverlay = document.getElementById('levelSelectOverlay');
     this.hud = document.getElementById('hud');
     this.toastEl = document.getElementById('toast');
     this.questionBanner = document.getElementById('questionBanner');
@@ -66,13 +67,51 @@ export class UI {
     });
 
     document.getElementById('btnLevels').addEventListener('click', () => {
-      const v = (document.getElementById('playerName').value || '').trim() || 'Piloto Tech';
-      game.playerName = v;
-      savePlayerName(v);
       game.audio.ui();
-      this.hideAllOverlays();
-      game.startMode('levels');
+      this.show('levelSelect');
     });
+
+    const btnQuickStart = document.getElementById('btnQuickStart');
+    if (btnQuickStart) {
+      btnQuickStart.addEventListener('click', () => {
+        const v = (document.getElementById('playerName').value || '').trim() || 'Piloto Tech';
+        game.playerName = v;
+        savePlayerName(v);
+        game.audio.ui();
+        this.hideAllOverlays();
+        game.startMode('levels', 1);
+      });
+    }
+
+    const btnBackLvl = document.getElementById('btnBackFromLevelSelect');
+    if (btnBackLvl) {
+      btnBackLvl.addEventListener('click', () => {
+        game.audio.ui();
+        this.show('menu');
+      });
+    }
+
+    document.querySelectorAll('.lvl-start-btn, .level-card-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const card = btn.classList.contains('level-card-btn') ? btn : btn.closest('.level-card-btn');
+        const lvl = parseInt(card?.dataset.level || btn.dataset.level || '1');
+        const v = (document.getElementById('playerName').value || '').trim() || 'Piloto Tech';
+        game.playerName = v;
+        savePlayerName(v);
+        game.audio.ui();
+        this.hideAllOverlays();
+        game.startMode('levels', lvl);
+      });
+    });
+
+    const btnChangeLevel = document.getElementById('btnChangeLevel');
+    if (btnChangeLevel) {
+      btnChangeLevel.addEventListener('click', () => {
+        game.audio.ui();
+        this.show('levelSelect');
+      });
+    }
 
     document.getElementById('btnControls').addEventListener('click', () => {
       game.audio.ui();
@@ -110,8 +149,9 @@ export class UI {
     document.getElementById('btnRetry').addEventListener('click', () => {
       game.audio.ui();
       const m = game.levelManager.mode;
+      const lvl = game.levelManager.level;
       this.hideAllOverlays();
-      game.startMode(m);
+      game.startMode(m, lvl);
     });
     document.getElementById('btnMenu').addEventListener('click', () => {
       game.state = 'menu';
@@ -180,6 +220,9 @@ export class UI {
       this.settingsOverlay.classList.remove('hidden');
       this.renderBindings();
     } else if (name === 'scores') this.scoresOverlay.classList.remove('hidden');
+    else if (name === 'levelSelect') {
+      if (this.levelSelectOverlay) this.levelSelectOverlay.classList.remove('hidden');
+    }
   }
 
   hideAllOverlays() {
@@ -191,8 +234,9 @@ export class UI {
       this.pauseOverlay,
       this.gameoverOverlay,
       this.levelOverlay,
+      this.levelSelectOverlay,
     ]) {
-      el.classList.add('hidden');
+      if (el) el.classList.add('hidden');
     }
   }
 

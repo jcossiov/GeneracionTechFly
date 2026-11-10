@@ -178,6 +178,72 @@
     color: var(--gt-gold);
   }
 
+  /* Selector de Niveles Pedagógicos y Grupos */
+  .level-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    width: min(920px, 94vw);
+    max-height: 65vh;
+    overflow-y: auto;
+    padding: 6px;
+    margin: 10px 0;
+  }
+  .level-card-btn {
+    background: rgba(15, 23, 42, 0.88);
+    border: 2px solid rgba(255, 199, 0, 0.35);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+  .level-card-btn:hover {
+    border-color: var(--gt-cyan);
+    background: rgba(15, 23, 42, 0.98);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 245, 212, 0.25);
+  }
+  .level-card-btn .lvl-badge {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    align-self: flex-start;
+    margin-bottom: 6px;
+  }
+  .level-card-btn .lvl-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+  .level-card-btn .lvl-topic {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--gt-gold);
+    margin-bottom: 6px;
+  }
+  .level-card-btn .lvl-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    flex-grow: 1;
+  }
+  .level-card-btn .lvl-start-btn {
+    min-width: 0;
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    margin: 0;
+  }
+
   /* HUD Principal */
   .hud {
     position: fixed;
@@ -549,7 +615,8 @@
   </div>
 
   <div class="row" style="margin-top:2px">
-    <button class="btn primary" id="btnLevels">🚀 Modo Niveles (Ruta Gen Tech)</button>
+    <button class="btn primary" id="btnLevels">🎯 Elegir Nivel / Grupo de Niños</button>
+    <button class="btn" id="btnQuickStart">🚀 Iniciar desde Nivel 1</button>
     <button class="btn" id="btnArcade">♾️ Modo Arcade (Infinito)</button>
   </div>
   <div class="row">
@@ -606,6 +673,65 @@
   <div class="footer-credit">Diseñado y Desarrollado por <strong>Jesús Cossio</strong></div>
 </div>
 
+<!-- Selector de Niveles / Grupos de Niños -->
+<div class="overlay hidden" id="levelSelectOverlay">
+  <div class="brand-pill">RUTA GENERACIÓN TECH</div>
+  <h2>🎯 Elegir Nivel / Grupo de Niños</h2>
+  <p>Selecciona el punto de partida según la edad o el grupo de estudiantes que va a jugar:</p>
+
+  <div class="level-cards-grid">
+    <!-- Nivel 1 -->
+    <div class="level-card-btn" data-level="1">
+      <div class="lvl-badge" style="background:#ffc700; color:#070b19">NIVEL 1 • RECOMENDADO NIÑOS PEQUEÑOS</div>
+      <div class="lvl-title">🌱 Etapa Semilla</div>
+      <div class="lvl-topic">Matemáticas Iniciales</div>
+      <div class="lvl-desc">Sumas y restas sencillas de 1 dígito (3 + 4, 8 - 3). 2 tarjetas gigantes, vuelo suave y asistido.</div>
+      <button class="btn primary lvl-start-btn" data-level="1">Jugar Nivel 1</button>
+    </div>
+
+    <!-- Nivel 2 -->
+    <div class="level-card-btn" data-level="2">
+      <div class="lvl-badge" style="background:#38bdf8; color:#070b19">NIVEL 2 • PRIMARIA / INTERMEDIO</div>
+      <div class="lvl-title">🧮 Infancia Exploradora</div>
+      <div class="lvl-topic">Tablas de Multiplicar y Agilidad</div>
+      <div class="lvl-desc">Multiplicaciones y cálculo mental rápido (6 × 7, 9 × 4). 3 opciones y ritmo dinámico.</div>
+      <button class="btn primary lvl-start-btn" data-level="2">Jugar Nivel 2</button>
+    </div>
+
+    <!-- Nivel 3 -->
+    <div class="level-card-btn" data-level="3">
+      <div class="lvl-badge" style="background:#a855f7; color:#fff">NIVEL 3 • JÓVENES PROGRAMADORES</div>
+      <div class="lvl-title">🐍 Juventud Programadora</div>
+      <div class="lvl-topic">Programación en Python</div>
+      <div class="lvl-desc">Fundamentos de programación: print(), funciones def, variables, listas y lógica computacional.</div>
+      <button class="btn primary lvl-start-btn" data-level="3">Jugar Nivel 3</button>
+    </div>
+
+    <!-- Nivel 4 -->
+    <div class="level-card-btn" data-level="4">
+      <div class="lvl-badge" style="background:#10b981; color:#070b19">NIVEL 4 • MAKER & ROBÓTICA</div>
+      <div class="lvl-title">🤖 Aprendiz Maker</div>
+      <div class="lvl-topic">Arduino & Impresión 3D</div>
+      <div class="lvl-desc">Microcontroladores, pines de entrada/salida, sensores, filamentos PLA y manufactura aditiva.</div>
+      <button class="btn primary lvl-start-btn" data-level="4">Jugar Nivel 4</button>
+    </div>
+
+    <!-- Nivel 5 -->
+    <div class="level-card-btn" data-level="5">
+      <div class="lvl-badge" style="background:#f72585; color:#fff">NIVEL 5 • GRADUACIÓN TECH</div>
+      <div class="lvl-title">🌐 Innovador Generación Tech</div>
+      <div class="lvl-topic">IoT, Nube y Reto Supremo</div>
+      <div class="lvl-desc">Internet de las Cosas, sensores en red, telemetría y combate final contra el Glitch Overlord supremo.</div>
+      <button class="btn primary lvl-start-btn" data-level="5">Jugar Nivel 5</button>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top:10px">
+    <button class="btn" id="btnBackFromLevelSelect">⬅️ Volver al Menú</button>
+  </div>
+  <div class="footer-credit">Diseñado y Desarrollado por <strong>Jesús Cossio</strong> • Generación Tech / CTA</div>
+</div>
+
 <!-- Pausa -->
 <div class="overlay hidden" id="pauseOverlay">
   <h2>Misión en Pausa</h2>
@@ -622,6 +748,7 @@
   <p id="goText"></p>
   <div class="row">
     <button class="btn primary" id="btnRetry">Reintentar Misión</button>
+    <button class="btn" id="btnChangeLevel">🎯 Cambiar Nivel</button>
     <button class="btn" id="btnMenu">Menú Principal</button>
   </div>
   <div class="footer-credit">Diseñado y Desarrollado por <strong>Jesús Cossio</strong> • Generación Tech</div>
@@ -650,6 +777,6 @@
   }
 }
 </script>
-<script type="module" src="src/main.js?v=14"></script>
+<script type="module" src="src/main.js?v=15"></script>
 </body>
 </html>

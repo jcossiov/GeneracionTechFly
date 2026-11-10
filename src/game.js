@@ -186,9 +186,9 @@ export class Game {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-  startMode(mode) {
+  startMode(mode, startLevel = 1) {
     this.resetRun();
-    this.levelManager.start(mode);
+    this.levelManager.start(mode, startLevel);
     const stage = this.levelManager.getCurrentStage();
     this.applyStageTheme(stage);
     this.state = 'playing';
